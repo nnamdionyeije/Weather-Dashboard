@@ -1,0 +1,34 @@
+.main-section{
+    min-height: 1000px;
+    display:flex;
+}
+.left-column {
+    background-color: red;
+    min-height: 100px;
+    min-width: 20%;
+}
+
+.right-column {
+    background-color: blue;
+    min-width: 80%;
+}
+
+.search {
+    min-height: 20%;
+    background-color: brown;
+}
+
+.history {
+    min-height: 80%;
+    background-color: antiquewhite;
+}
+
+.current-weather {
+    min-height: 30%;
+
+}
+
+.forecast {
+    min-height: 70%;
+    background-color: azure;
+}
