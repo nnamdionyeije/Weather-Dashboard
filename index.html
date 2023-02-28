@@ -14,19 +14,33 @@
   </head>
   <body>
     <header>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand">Weather Dashboard</a>
       </nav>
     </header>
 
     <main class="main-section">
       <div class="left-column">
-        <div class="search"></div>
-        <div class="history"></div>
+        <div class="search">
+          <h2>Search for a City:</h2>
+          <form id="search-form">
+            <input type="text" class="search-input" />
+            <button class="submit-button">Submit</button>
+          </form>
+        </div>
+        <div class="history">
+          <ul class="history-buttons">
+            <li></li>
+          </ul>
+        </div>
       </div>
       <div class="right-column">
-        <div class="current-weather"></div>
-        <div class="forecast"></div>
+        <div class="current-weather">
+          <div class="weather-box">weather</div>
+        </div>
+        <div class="forecast">
+          <h3>5-Day Forecast</h3>
+        </div>
       </div>
     </main>
 
@@ -34,3 +48,27 @@
     <script src="./assets/js/script.js"></script>
   </body>
 </html>
+
+<!-- unneeded bootstrap code -->
+<!-- <main class="row" style="height: 900px">
+  <div class="col-3" style="background-color: aquamarine; padding: 0">
+    <div class="container h-25" style="background-color: bisque">
+      Search
+    </div>
+    <div class="container h-75" style="background-color: rgb(178, 74, 74)">
+      History
+    </div>
+  </div>
+  <div class="col-9" style="background-color: aqua; padding: 0; margin: 0">
+    <div
+      class="container h-25"
+      style="background-color: aquamarine; margin: 0; padding: 0"
+    >
+      tee
+    </div>
+    <div
+      class="container h-75"
+      style="background-color: blue; margin: 0%; padding: 0%"
+    ></div>
+  </div>
+</main> -->

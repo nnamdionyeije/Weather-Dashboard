@@ -1,26 +1,52 @@
+
+nav {
+    height: 8vh;
+}
+
 .main-section{
-    min-height: 1000px;
+    /* min-height: 895px; */
+    height: 92vh;
     display:flex;
 }
 .left-column {
-    background-color: red;
+    /* background-color: red; */
     min-height: 100px;
     min-width: 20%;
 }
 
 .right-column {
-    background-color: blue;
+    /* background-color: blue; */
     min-width: 80%;
 }
 
 .search {
     min-height: 20%;
-    background-color: brown;
+    /* background-color: brown; */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid gray;
 }
+
+.search form {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.search form .search-input {
+    margin-bottom: 10px;
+}
+
+.search form button {
+    background-color: aqua;
+}
+
+
 
 .history {
     min-height: 80%;
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
 }
 
 .current-weather {
@@ -30,5 +56,13 @@
 
 .forecast {
     min-height: 70%;
-    background-color: azure;
+    margin: 20px;
+}
+
+.weather-box {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    height: 25vh;
+    width: 85%
 }

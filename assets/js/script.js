@@ -1,3 +1,19 @@
+var searchForm = document.querySelector.apply("#search-form");
+var searchInput = document.querySelector.apply(".search-input");
+
+
+searchForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+    if (searchInput.value = "") {
+        return;
+    }
+
+    var cityName = searchInput.value;
+})
+
+
+
+
 
 
 
