@@ -66,3 +66,23 @@ nav {
     height: 25vh;
     width: 85%
 }
+
+.forecast-objects {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.forecast-container {
+    background-color: darkgray;
+    min-height: 250px;
+    min-width: 200px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.forecast-container img {
+    max-width: 50px;
+}
