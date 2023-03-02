@@ -1,32 +1,8 @@
 var locationArray = [];
-var searchForm = document.querySelector("#search-form");
-//after the call I will have to set these back to empty arrays
+const wrapper = document.querySelectorAll('.history-buttons');
     
-// $('#search-form').submit(function(event) {
+$('#search-form').submit(function(event) {
 
-
-function getGeoCode(stringCity) {
-
-    var requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + stringCity + '&limit=5&appid=87c01ac00f3c64dda1d5e5131cf3d6a8';
-    fetch(requestUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            if (data.length == 0) {
-                return
-            }
-            debugger;
-
-            locationArray.push(data[0].lat);
-            locationArray.push(data[0].lon);
-            locationArray.push(data[0].name);
-        });    
-}
-
-
-searchForm.addEventListener("submit", function(event) {
-    
     event.preventDefault();
     var repeatChecker;
 
@@ -42,26 +18,38 @@ searchForm.addEventListener("submit", function(event) {
         }
     })
 
-
     if (repeatChecker === true) {
         return;
     } else {
-        getGeoCode(cityName);
-        debugger;
-        if (locationArray.length == 0) {
-            $('.search-input').val("");
-            return;
-        } else {
-            getCurrentForecast(locationArray[0], locationArray[1]);
-            getFiveDayForecast(locationArray[0], locationArray[1]);
-            setCityButtons(locationArray);
-            $('.search-input').val("");
-            locationArray = [];
-        }
+        $(".weather-box").children("h2").remove();
+        $(".weather-box").children("h3").remove();
+        $(".forecast-objects").children("div").remove();
+
+        var currentLocationArray = getGeoCode(cityName);
+        $('.search-input').val("");
+        locationArray = [];
     }
 })
 
+async function getGeoCode(stringCity) {
 
+    var requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + stringCity + '&limit=5&appid=87c01ac00f3c64dda1d5e5131cf3d6a8';
+    
+    let results = await fetch(requestUrl)
+    let data = await results.json();
+
+    if (data.length == 0) {
+        $('.search-input').val("");
+        return
+    } else {
+        locationArray.push(data[0].lat);
+        locationArray.push(data[0].lon);
+        locationArray.push(data[0].name); 
+        getCurrentForecast(locationArray[0], locationArray[1]);
+        getFiveDayForecast(locationArray[0], locationArray[1]);
+        setCityButtons(locationArray);
+    }
+}
 
 
 function getCurrentForecast(latitude, longitude) {
@@ -117,9 +105,6 @@ function setFiveDayForecast(data) {
 }
 
 function setCityButtons(currLocationArray) {
-    
-    
-
     var citiesArray = [];
 
     var newLocationObject = [
@@ -142,11 +127,13 @@ function setCityButtons(currLocationArray) {
     var buttonListItem = $("<li>").append(newButton);
     $(".history-buttons-list").append(buttonListItem);
     
-    //check to see if the city button is in local storage
-    //if so return
-    //if not add the button
-    
     
 }
 
-// function addCityButton()
+// $(".history-button").each(function () {
+//     var currButton = this;
+//     currButton.addEventListener("click", function(event) {
+//         event.preventDefault;
+//         console.log("test");
+//     })
+// })
