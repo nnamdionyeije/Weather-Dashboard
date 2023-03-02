@@ -1,32 +1,13 @@
 var locationArray = [];
+var searchForm = document.querySelector("#search-form");
 //after the call I will have to set these back to empty arrays
     
-$('#search-form').submit(function(event) {
-    event.preventDefault();
-    if ($('.search-input').val() == "") {
-        return;
-    } else {
-        var cityName = $(".search-input").val();
-        var locationObject = getGeoCode(cityName);
-        if (locationArray.length == 0) {
-            return;
-        } else {
-            getCurrentForecast(locationArray[0], locationArray[1]);
-            getFiveDayForecast(locationArray[0], locationArray[1]);
-            var newButton =  $("<button>").text(locationArray[2]);
-            var buttonListItem = $("<li>").append(newButton);
-            $(".history-buttons").append(buttonListItem);
-            console.log(locationArray[2]);
-        }
-    }
-
-    
-})
+// $('#search-form').submit(function(event) {
 
 
 function getGeoCode(stringCity) {
+
     var requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + stringCity + '&limit=5&appid=87c01ac00f3c64dda1d5e5131cf3d6a8';
-    var location = [];
     fetch(requestUrl)
         .then(function (response) {
             return response.json();
@@ -35,11 +16,53 @@ function getGeoCode(stringCity) {
             if (data.length == 0) {
                 return
             }
+            debugger;
+
             locationArray.push(data[0].lat);
             locationArray.push(data[0].lon);
             locationArray.push(data[0].name);
         });    
 }
+
+
+searchForm.addEventListener("submit", function(event) {
+    
+    event.preventDefault();
+    var repeatChecker;
+
+    var cityName = $(".search-input").val();
+
+    if (cityName == "") {
+        return;
+    } 
+    
+    $('.history-button').each(function() {
+        if ($(this).text().toUpperCase() == cityName.toUpperCase()) {
+            repeatChecker = true;
+        }
+    })
+
+
+    if (repeatChecker === true) {
+        return;
+    } else {
+        getGeoCode(cityName);
+        debugger;
+        if (locationArray.length == 0) {
+            $('.search-input').val("");
+            return;
+        } else {
+            getCurrentForecast(locationArray[0], locationArray[1]);
+            getFiveDayForecast(locationArray[0], locationArray[1]);
+            setCityButtons(locationArray);
+            $('.search-input').val("");
+            locationArray = [];
+        }
+    }
+})
+
+
+
 
 function getCurrentForecast(latitude, longitude) {
     var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=87c01ac00f3c64dda1d5e5131cf3d6a8&units=imperial';
@@ -71,7 +94,6 @@ function getFiveDayForecast(latitude, longitude) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data.list[0]);
             setFiveDayForecast(data);
         })
 }
@@ -92,6 +114,39 @@ function setFiveDayForecast(data) {
         dayContainer.append(nextData, forecastImage, tempLineForecast, windLineForecast, humidLineForecast);
         $(".forecast-objects").append(dayContainer);
     } 
+}
+
+function setCityButtons(currLocationArray) {
+    
+    
+
+    var citiesArray = [];
+
+    var newLocationObject = [
+        latValue = locationArray[0],
+        longValue = locationArray[1],
+        cityName = locationArray[2],
+    ]
+
+    var holder = JSON.parse(localStorage.getItem("cityObjects"));
+    
+    if (holder === null) {
+        citiesArray.push(newLocationObject);
+    } else {
+        citiesArray = holder;
+        citiesArray.push(newLocationObject);
+    }
+
+    localStorage.setItem("cityObjects", JSON.stringify(citiesArray));
+    var newButton =  $("<button>").text(currLocationArray[2]).addClass("history-button");
+    var buttonListItem = $("<li>").append(newButton);
+    $(".history-buttons-list").append(buttonListItem);
+    
+    //check to see if the city button is in local storage
+    //if so return
+    //if not add the button
+    
+    
 }
 
 // function addCityButton()
