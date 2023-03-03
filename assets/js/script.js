@@ -1,5 +1,10 @@
 var locationArray = [];
 const wrapper = document.querySelectorAll('.history-buttons');
+var buttonAction = $('.history-buttons-list');
+
+
+//bug: If the user types in a city name like "bronx", then the api will make a button called "the bronx"
+// however this means that the checker for duplicate buttons won't register it as a duplicate
     
 $('#search-form').submit(function(event) {
 
@@ -26,7 +31,9 @@ $('#search-form').submit(function(event) {
         $(".forecast-objects").children("div").remove();
 
         var currentLocationArray = getGeoCode(cityName);
+
         $('.search-input').val("");
+        
         locationArray = [];
     }
 })
@@ -48,6 +55,7 @@ async function getGeoCode(stringCity) {
         getCurrentForecast(locationArray[0], locationArray[1]);
         getFiveDayForecast(locationArray[0], locationArray[1]);
         setCityButtons(locationArray);
+        //moving this function call back to the event handler
     }
 }
 
@@ -122,18 +130,56 @@ function setCityButtons(currLocationArray) {
         citiesArray.push(newLocationObject);
     }
 
+    if (citiesArray.length > 10) {
+        citiesArray.shift();
+        $(".history-buttons-list li").first().remove();
+    }
+
     localStorage.setItem("cityObjects", JSON.stringify(citiesArray));
     var newButton =  $("<button>").text(currLocationArray[2]).addClass("history-button");
     var buttonListItem = $("<li>").append(newButton);
-    $(".history-buttons-list").append(buttonListItem);
+
+    $(".history-buttons-list").append(buttonListItem);   
     
     
 }
 
-// $(".history-button").each(function () {
-//     var currButton = this;
-//     currButton.addEventListener("click", function(event) {
-//         event.preventDefault;
-//         console.log("test");
-//     })
-// })
+$('.history-buttons-list').on("click", function(event) {
+    event.preventDefault;
+    var element = event.target;
+    if (element.matches('button')) {
+        $(".weather-box").children("h2").remove();
+        $(".weather-box").children("h3").remove();
+        $(".forecast-objects").children("div").remove();
+
+        //cycle through local storage for the matching object then pull the location data
+        var storedCities = JSON.parse(localStorage.getItem("cityObjects"));
+        var buttonTextHolder = element.textContent;
+        console.log(storedCities[0][2]);
+
+        for (i = 0; i < storedCities.length; i++) {
+            var cityHolder = storedCities[i][2];
+            
+            if (cityHolder.toUpperCase() == buttonTextHolder.toUpperCase()) {
+                getCurrentForecast(storedCities[i][0], storedCities[i][1]);
+                getFiveDayForecast(storedCities[i][0], storedCities[i][1]);
+                return;
+            }
+        }
+        // getGeoCode(element.textContent);
+        // $('.search-input').val("");
+        // locationArray = [];
+    }
+})
+
+function init() {
+    var storedCities = JSON.parse(localStorage.getItem("cityObjects"));
+    for (i = 0; i < storedCities.length; i++) {
+        var newButton =  $("<button>").text(storedCities[i][2]).addClass("history-button");
+        var buttonListItem = $("<li>").append(newButton);
+        $(".history-buttons-list").append(buttonListItem);
+    }
+}
+
+init();
+
