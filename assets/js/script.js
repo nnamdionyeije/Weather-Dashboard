@@ -1,6 +1,8 @@
 var locationArray = [];
 const wrapper = document.querySelectorAll('.history-buttons');
 var buttonAction = $('.history-buttons-list');
+var repeatChecker;
+//moved repeat checker outside ofthe event handler
 
 
 //bug: If the user types in a city name like "bronx", then the api will make a button called "the bronx"
@@ -9,33 +11,23 @@ var buttonAction = $('.history-buttons-list');
 $('#search-form').submit(function(event) {
 
     event.preventDefault();
-    var repeatChecker;
+    
 
     var cityName = $(".search-input").val();
 
     if (cityName == "") {
         return;
     } 
-    
-    $('.history-button').each(function() {
-        if ($(this).text().toUpperCase() == cityName.toUpperCase()) {
-            repeatChecker = true;
-        }
-    })
 
-    if (repeatChecker === true) {
-        return;
-    } else {
-        $(".weather-box").children("h2").remove();
+    $(".weather-box").children("h2").remove();
         $(".weather-box").children("h3").remove();
         $(".forecast-objects").children("div").remove();
 
-        var currentLocationArray = getGeoCode(cityName);
+        getGeoCode(cityName);
 
         $('.search-input').val("");
         
         locationArray = [];
-    }
 })
 
 async function getGeoCode(stringCity) {
@@ -49,12 +41,30 @@ async function getGeoCode(stringCity) {
         $('.search-input').val("");
         return
     } else {
+        // check the 5 data indices for one that fully matches the text given into the form
+        // if you find it, use it, if not, use the first one
         locationArray.push(data[0].lat);
         locationArray.push(data[0].lon);
         locationArray.push(data[0].name); 
         getCurrentForecast(locationArray[0], locationArray[1]);
         getFiveDayForecast(locationArray[0], locationArray[1]);
-        setCityButtons(locationArray);
+
+        $('.history-button').each(function() {
+            // console.log($(this).text().toUpperCase());
+            if ($(this).text().toUpperCase() == locationArray[2].toUpperCase() ) {
+                // $(this).text().toUpperCase() == cityName.toUpperCase()
+                //|| $(this).text().toUpperCase() == locationArray[2]
+                repeatChecker = true;
+            }
+        })
+
+        if (repeatChecker === true) {
+            repeatChecker = false;
+            return;
+        } else {
+            setCityButtons(locationArray);
+        }
+        
         //moving this function call back to the event handler
     }
 }
@@ -72,7 +82,10 @@ function getCurrentForecast(latitude, longitude) {
 }
 
 function setCurrentForecast(data) {
-    var cityTime = data.name + ' ' + dayjs.unix(data.dt).format('(MMMM, DD YYYY)');
+    console.log(data);
+    locationArray.push(data.name);
+    var cityTime = locationArray[2] + ' ' + dayjs.unix(data.dt).format('(MMMM, DD YYYY)');
+    //changing city time from data.name to locationstorage[2]
     var weatherImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '.png');
     var cityTimeLine = $("<h2>").text(cityTime).append(weatherImage);
 
@@ -136,7 +149,7 @@ function setCityButtons(currLocationArray) {
     }
 
     localStorage.setItem("cityObjects", JSON.stringify(citiesArray));
-    var newButton =  $("<button>").text(currLocationArray[2]).addClass("history-button");
+    var newButton =  $("<button>").text(locationArray[2]).addClass("history-button");
     var buttonListItem = $("<li>").append(newButton);
 
     $(".history-buttons-list").append(buttonListItem);   
@@ -155,12 +168,12 @@ $('.history-buttons-list').on("click", function(event) {
         //cycle through local storage for the matching object then pull the location data
         var storedCities = JSON.parse(localStorage.getItem("cityObjects"));
         var buttonTextHolder = element.textContent;
-        console.log(storedCities[0][2]);
 
         for (i = 0; i < storedCities.length; i++) {
             var cityHolder = storedCities[i][2];
             
             if (cityHolder.toUpperCase() == buttonTextHolder.toUpperCase()) {
+                locationArray[2] = cityHolder;
                 getCurrentForecast(storedCities[i][0], storedCities[i][1]);
                 getFiveDayForecast(storedCities[i][0], storedCities[i][1]);
                 return;
@@ -174,11 +187,16 @@ $('.history-buttons-list').on("click", function(event) {
 
 function init() {
     var storedCities = JSON.parse(localStorage.getItem("cityObjects"));
-    for (i = 0; i < storedCities.length; i++) {
-        var newButton =  $("<button>").text(storedCities[i][2]).addClass("history-button");
-        var buttonListItem = $("<li>").append(newButton);
-        $(".history-buttons-list").append(buttonListItem);
+    if (storedCities != null) {
+        for (i = 0; i < storedCities.length; i++) {
+            var newButton =  $("<button>").text(storedCities[i][2]).addClass("history-button");
+            var buttonListItem = $("<li>").append(newButton);
+            $(".history-buttons-list").append(buttonListItem);
+        }
+    } else {
+        return;
     }
+    
 }
 
 init();
