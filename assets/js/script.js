@@ -86,7 +86,7 @@ function setCurrentForecast(data) {
     locationArray.push(data.name);
     var cityTime = locationArray[2] + ' ' + dayjs.unix(data.dt).format('(MMMM, DD YYYY)');
     //changing city time from data.name to locationstorage[2]
-    var weatherImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '.png');
+    var weatherImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png');
     var cityTimeLine = $("<h2>").text(cityTime).append(weatherImage);
 
     var tempLine = $("<h3>").text("Temp: " + data.main.temp + " \u2109");
@@ -111,14 +111,14 @@ function setFiveDayForecast(data) {
     for (i = 1; i < 6; i++) {
         var currentindex = (i * 8) - 1;
         var dayContainer = $("<div>").addClass("forecast-container");
-        var nextDataText = dayjs.unix(data.list[currentindex].dt).format('(MMMM, DD YYYY)');
-        var nextData = $("<h2>").text(nextDataText);
+        var nextDataText = dayjs.unix(data.list[currentindex].dt).format('MMMM, DD YYYY');
+        var nextData = $("<h3>").text(nextDataText);
 
-        var forecastImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.list[currentindex].weather[0].icon + '.png');
+        var forecastImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.list[currentindex].weather[0].icon + '@2x.png');
 
-        var tempLineForecast = $("<h3>").text("Temp: " + data.list[currentindex].main.temp + " \u2109");
-        var windLineForecast = $("<h3>").text("Wind: " + data.list[currentindex].wind.speed + " MPH");
-        var humidLineForecast = $("<h3>").text("Humidity: " + data.list[currentindex].main.humidity + " %");
+        var tempLineForecast = $("<h4>").text("Temp: " + data.list[currentindex].main.temp + " \u2109");
+        var windLineForecast = $("<h4>").text("Wind: " + data.list[currentindex].wind.speed + " MPH");
+        var humidLineForecast = $("<h4>").text("Humidity: " + data.list[currentindex].main.humidity + " %");
 
         dayContainer.append(nextData, forecastImage, tempLineForecast, windLineForecast, humidLineForecast);
         $(".forecast-objects").append(dayContainer);
