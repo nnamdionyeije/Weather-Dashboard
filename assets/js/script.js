@@ -84,7 +84,7 @@ function getCurrentForecast(latitude, longitude) {
 function setCurrentForecast(data) {
     console.log(data);
     locationArray.push(data.name);
-    var cityTime = locationArray[2] + ' ' + dayjs.unix(data.dt).format('(MMMM, DD YYYY)');
+    var cityTime = locationArray[2] + ' ' + dayjs.unix(data.dt).format('(MMMM DD, YYYY)');
     //changing city time from data.name to locationstorage[2]
     var weatherImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png');
     var cityTimeLine = $("<h2>").text(cityTime).append(weatherImage);
@@ -111,7 +111,7 @@ function setFiveDayForecast(data) {
     for (i = 1; i < 6; i++) {
         var currentindex = (i * 8) - 1;
         var dayContainer = $("<div>").addClass("forecast-container");
-        var nextDataText = dayjs.unix(data.list[currentindex].dt).format('MMMM, DD YYYY');
+        var nextDataText = dayjs.unix(data.list[currentindex].dt).format('MMMM DD, YYYY');
         var nextData = $("<h3>").text(nextDataText);
 
         var forecastImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.list[currentindex].weather[0].icon + '@2x.png');
