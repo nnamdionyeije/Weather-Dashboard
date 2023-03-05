@@ -18,4 +18,4 @@ N/A
 
 ## Link
 
-https://nnamdionyeije.github.io/weather-dashboard/
+https://nnamdionyeije.github.io/Weather-Dashboard/
