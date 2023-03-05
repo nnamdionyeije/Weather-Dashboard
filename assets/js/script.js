@@ -2,7 +2,6 @@ var locationArray = [];
 const wrapper = document.querySelectorAll('.history-buttons');
 var buttonAction = $('.history-buttons-list');
 var repeatChecker;
-//moved repeat checker outside ofthe event handler
 
 
 //bug: If the user types in a city name like "bronx", then the api will make a button called "the bronx"

@@ -67,6 +67,7 @@ nav {
     display: flex;
     flex-direction: column;
     padding-bottom: 2%;
+    margin-top: 10px;
     
 }
 
@@ -165,6 +166,7 @@ nav {
     flex-direction: column;
     padding: 10px;
     color: var(--white);
+    margin-top: 10px;
 
 }
 
