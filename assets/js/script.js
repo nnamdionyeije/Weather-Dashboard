@@ -31,7 +31,8 @@ $('#search-form').submit(function(event) {
 
 async function getGeoCode(stringCity) {
 
-    var requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + stringCity + '&limit=5&appid=87c01ac00f3c64dda1d5e5131cf3d6a8';
+    var requestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + stringCity + '&limit=5&appid=87c01ac00f3c64dda1d5e5131cf3d6a8';
+    //added http's'
     
     let results = await fetch(requestUrl)
     let data = await results.json();
@@ -85,7 +86,7 @@ function setCurrentForecast(data) {
     locationArray.push(data.name);
     var cityTime = locationArray[2] + ' ' + dayjs.unix(data.dt).format('(MMMM DD, YYYY)');
     //changing city time from data.name to locationstorage[2]
-    var weatherImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png');
+    var weatherImage = $("<img>").attr("src", 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png');
     var cityTimeLine = $("<h2>").text(cityTime).append(weatherImage);
 
     var tempLine = $("<h3>").text("Temp: " + data.main.temp + " \u2109");
@@ -113,7 +114,7 @@ function setFiveDayForecast(data) {
         var nextDataText = dayjs.unix(data.list[currentindex].dt).format('MMMM DD, YYYY');
         var nextData = $("<h3>").text(nextDataText);
 
-        var forecastImage = $("<img>").attr("src", 'http://openweathermap.org/img/wn/' + data.list[currentindex].weather[0].icon + '@2x.png');
+        var forecastImage = $("<img>").attr("src", 'https://openweathermap.org/img/wn/' + data.list[currentindex].weather[0].icon + '@2x.png');
 
         var tempLineForecast = $("<h4>").text("Temp: " + data.list[currentindex].main.temp + " \u2109");
         var windLineForecast = $("<h4>").text("Wind: " + data.list[currentindex].wind.speed + " MPH");
